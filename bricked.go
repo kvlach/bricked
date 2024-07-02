@@ -9,14 +9,16 @@ import (
 type client struct {
 	workspaceURL string
 	apiVersion   string
+	token        string
 }
 
-func NewClient(workspaceName, apiVersion string) client {
-	workspaceURL := findWorkspaceUrl(workspaceName)
+func NewClient(workspaceName, resourceGroup, apiVersion string) client {
+	workspaceURL := findWorkspaceUrl(workspaceName, resourceGroup)
 
 	return client{
 		workspaceURL: workspaceURL,
 		apiVersion:   apiVersion,
+		token:        getEntraToken(),
 	}
 }
 
@@ -32,9 +34,18 @@ func (c *client) request(what string, ret any) {
 }
 
 func (c *client) GET(what string, ret any) {
-	url := fmt.Sprintf("%s/%s/%s", c.workspaceURL, c.apiVersion, what)
+	url := fmt.Sprintf("%s/api/%s/%s", c.workspaceURL, c.apiVersion, what)
+	fmt.Printf("[DEBUG] url = %s\n", url)
 
-	resp, err := http.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Authorization", "Bearer "+c.token)
+
+	resp, err := http.DefaultClient.Do(req)
+
+	// resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
 	}
