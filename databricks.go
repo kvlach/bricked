@@ -59,6 +59,7 @@ func (c *databricks) GET(what string, ret any) {
 	if err := StrictUnmarshalJSON(body, ret); err != nil {
 		panic(err)
 	}
+	PrettyPrint(ret)
 }
 
 // func transientError(statusCode int) bool {

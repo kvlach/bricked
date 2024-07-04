@@ -63,3 +63,11 @@ func StrictUnmarshalJSON(data []byte, obj any) error {
 
 	return nil
 }
+
+func PrettyPrint(v any) {
+	bytes, err := json.MarshalIndent(v, "", "\t")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(bytes))
+}
