@@ -58,8 +58,8 @@ func (az *azure) findWorkspaceUrl(workspaceName, resourceGroup string) string {
 	)
 }
 
-func (az *azure) NewDatabricks(workspaceName, resourceGroup, apiVersion string) databricks {
-	return databricks{
+func (az *azure) NewDatabricks(workspaceName, resourceGroup, apiVersion string) *databricks {
+	return &databricks{
 		workspaceURL: az.findWorkspaceUrl(workspaceName, resourceGroup),
 		apiVersion:   apiVersion,
 		token:        az.getEntraToken(),
