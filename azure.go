@@ -22,11 +22,11 @@ func NewAzure(tenant, subscription string) *azure {
 func (az *azure) CLI(arg ...string) string {
 	slog.Debug("executing", "command", "az "+strings.Join(arg, " "))
 	out, err := exec.Command("az", arg...).CombinedOutput()
+	sout := strings.TrimSpace(string(out))
+	slog.Debug("command", "output", string(out))
 	if err != nil {
 		panic(err)
 	}
-	sout := strings.TrimSpace(string(out))
-	slog.Debug("command", "output", string(out))
 	return sout
 }
 
