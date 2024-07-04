@@ -9,7 +9,7 @@ type TokenList struct {
 	} `json:"token_infos"`
 }
 
-func (c *client) TokenList() TokenList {
+func (c *databricks) TokenList() TokenList {
 	c.assertVersion("2.0")
 
 	var resp TokenList

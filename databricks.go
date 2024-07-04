@@ -6,34 +6,24 @@ import (
 	"net/http"
 )
 
-type client struct {
+type databricks struct {
 	workspaceURL string
 	apiVersion   string
 	token        string
 }
 
-func NewClient(workspaceName, resourceGroup, apiVersion string) client {
-	workspaceURL := findWorkspaceUrl(workspaceName, resourceGroup)
-
-	return client{
-		workspaceURL: workspaceURL,
-		apiVersion:   apiVersion,
-		token:        getEntraToken(),
-	}
-}
-
-func (c *client) assertVersion(expected string) {
+func (c *databricks) assertVersion(expected string) {
 	if c.apiVersion != expected {
 		panic(fmt.Errorf("Expected API version '%s', got '%s'", c.apiVersion, expected))
 	}
 }
 
-func (c *client) request(what string, ret any) {
+func (c *databricks) request(what string, ret any) {
 	// GET/POST/etc. will just wrap this method
 	panic("TODO: Implement")
 }
 
-func (c *client) GET(what string, ret any) {
+func (c *databricks) GET(what string, ret any) {
 	url := fmt.Sprintf("%s/api/%s/%s", c.workspaceURL, c.apiVersion, what)
 	fmt.Printf("[DEBUG] url = %s\n", url)
 
