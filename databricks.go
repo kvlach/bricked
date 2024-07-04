@@ -3,8 +3,13 @@ package bricked
 import (
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 )
+
+func init() {
+	slog.SetLogLoggerLevel(slog.LevelDebug)
+}
 
 type databricks struct {
 	workspaceURL string
@@ -25,7 +30,7 @@ func (c *databricks) request(what string, ret any) {
 
 func (c *databricks) GET(what string, ret any) {
 	url := fmt.Sprintf("%s/api/%s/%s", c.workspaceURL, c.apiVersion, what)
-	fmt.Printf("[DEBUG] url = %s\n", url)
+	slog.Debug("GET", "url", url)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -49,7 +54,7 @@ func (c *databricks) GET(what string, ret any) {
 	if resp.StatusCode >= 400 {
 		panic(fmt.Errorf("Request failed, status code: %d, body: %s", resp.StatusCode, body))
 	}
-	fmt.Printf("Satus code: %d, body: %s\n", resp.StatusCode, body)
+	slog.Debug("request", "status code", resp.StatusCode, "body", body)
 
 	if err := StrictUnmarshalJSON(body, ret); err != nil {
 		panic(err)
